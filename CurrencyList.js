@@ -103,12 +103,6 @@ export default function ListCurrencies({route}) {
             
         }}
         />
-    <TouchableOpacity 
-        onPress={() => 
-            dispatch(changeQuoteCurrency("YEN"))
-        }>
-        <Text>Click me</Text>
-    </TouchableOpacity>
     </View>
   );
 }

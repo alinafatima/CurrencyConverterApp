@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image  } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 //redux imports 
 import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI, getConversionRateForBaseCurrency} from './changeBaseCurrency';
@@ -103,10 +103,12 @@ export default function Home({ navigation }) {
             backgroundColor: theme.hexCode,
             flexDirection: 'row'
           }}
-        onPress={() => 
-            dispatch(reverseCurrencies())
-        }>
-      <Icon
+        onPress={() => {
+            setBaseValue(localQuoteValue);
+            setQuoteValue(localBaseValue);
+            dispatch(reverseCurrencies());
+        }}>
+      <Ionicons
           name='sync'
           size={15}
           color='#ffffff'/>
