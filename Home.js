@@ -23,8 +23,8 @@ export default function Home({ navigation }) {
     const months = ["Jan" , "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dispatch = useDispatch();
 
-   dispatch(getAllCurrenciesFromAPI()); 
-   console.log("hereeee");
+  // dispatch(getAllCurrenciesFromAPI()); 
+   console.log("Home component");
     let todayDate = new Date();
 
   return (
@@ -92,14 +92,14 @@ export default function Home({ navigation }) {
           onChangeText={
             (text)=> {
               setQuoteValue(text);
-              console.log("heree")  
+              console.log("heree in change text quote")  
               setBaseValue(text/conversionRate);
             }
         }
         onSubmitEditing={
             (text)=> {
                 setQuoteValue(text);
-                console.log("heree")  
+                console.log("heree in submit editing ")  
                 setBaseValue(text/conversionRate);
               }
           }
