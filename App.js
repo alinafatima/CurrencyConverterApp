@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //redux
 import store from './store'
 import { Provider } from 'react-redux'
+
+
 const Stack = createNativeStackNavigator();
 
 
@@ -14,6 +16,9 @@ import Settings from './Settings';
 import CurrencyList from './CurrencyList';
 
 export default function App() {
+  
+ 
+ 
   return (
     <Provider store={store}>
     <NavigationContainer>  

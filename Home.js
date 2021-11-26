@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { useSelector, useDispatch } from 'react-redux';
 //redux imports 
-import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI } from './changeBaseCurrency';
+import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI, getConversionRateForBaseCurrency} from './changeBaseCurrency';
 
 
 export default function Home({ navigation }) {
@@ -18,13 +18,15 @@ export default function Home({ navigation }) {
 
     const [localBaseValue, setBaseValue] = useState(baseValue); 
     const [localQuoteValue, setQuoteValue] = useState(quoteValue); 
-    console.log(theme)
+    
     //Months for Date
     const months = ["Jan" , "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dispatch = useDispatch();
 
-  // dispatch(getAllCurrenciesFromAPI()); 
-   console.log("Home component");
+    dispatch(getAllCurrenciesFromAPI()); 
+    dispatch(getConversionRateForBaseCurrency(baseCurrency, quoteCurrency));
+  
+   console.log("Home component", "Base Currency from Store", baseCurrency, "rate from store", conversionRate);
     let todayDate = new Date();
 
   return (
@@ -68,12 +70,6 @@ export default function Home({ navigation }) {
                 setQuoteValue(text*conversionRate);
               }
           }
-          onSubmitEditing={
-            (text)=> {
-                setBaseValue(text);
-                setQuoteValue(text*conversionRate);
-              }
-          }
           
         />
       </View>
@@ -96,13 +92,6 @@ export default function Home({ navigation }) {
               setBaseValue(text/conversionRate);
             }
         }
-        onSubmitEditing={
-            (text)=> {
-                setQuoteValue(text);
-                console.log("heree in submit editing ")  
-                setBaseValue(text/conversionRate);
-              }
-          }
         />
       </View>
      

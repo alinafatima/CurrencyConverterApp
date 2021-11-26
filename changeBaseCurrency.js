@@ -39,6 +39,9 @@ export const counterSlice= createSlice({
         state.theme.hexCode = action.payload.colorHex; 
         //console.log(action);
     }, 
+    changeConversionRate: (state, action) => {
+        state.conversionRate = action.payload
+    },
     getAllCurrencies: (state, action) => {
         state.allCurrencies = action.payload;
     }
@@ -46,7 +49,7 @@ export const counterSlice= createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeBaseValue, changeQuoteValue, changeTheme, getAllCurrencies } = counterSlice.actions
+export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeBaseValue, changeQuoteValue, changeTheme, getAllCurrencies, changeConversionRate } = counterSlice.actions
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -62,17 +65,25 @@ export const getAllCurrenciesFromAPI = amount => dispatch => {
 export function getAllCurrenciesFromAPI() {
   // getAllCurrenciesFromAPIThunk is the "thunk function"
   return async function getAllCurrenciesFromAPIThunk(dispatch) {
-    const response = await fetch('http://api.exchangeratesapi.io/v1/symbols?access_key=6cb91471afd36f3afa36b4ab3a8c18df');
-    //console.log(response);
+    const response = await fetch('https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/codes');
     const json = await response.json();
- 
-    
-       
-    const allcurrencies = Object.keys(json.symbols);
-    dispatch(getAllCurrencies(allcurrencies)); 
-  }
+
+    dispatch(getAllCurrencies(json.supported_codes.map( curr => curr[0]))); 
+
+    }
 }
 
+export function getConversionRateForBaseCurrency(baseCurrency,quoteCurrency) {
+    
+    // getAllCurrenciesFromAPIThunk is the "thunk function"
+    return async function getConversionRateForBaseCurrency(dispatch) {
+      const response = await fetch('https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/latest/'+ baseCurrency);
+      const json = await response.json();
+      const conversionRates = json.conversion_rates;   
+      console.log(conversionRates[quoteCurrency])
+      dispatch(changeConversionRate(conversionRates[quoteCurrency])); 
+    }
+}
 
 
   
