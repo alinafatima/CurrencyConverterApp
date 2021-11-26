@@ -26,6 +26,10 @@ export const counterSlice= createSlice({
         var temp =  state.baseCurrency;
         state.baseCurrency = state.quoteCurrency;
         state.quoteCurrency = temp;
+
+        var temp =  state.baseValue;
+        state.baseValue = state.quoteValue;
+        state.quoteValue = temp;
        
     }, 
     changeBaseValue: (state, action) => {
