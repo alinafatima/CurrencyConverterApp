@@ -25,7 +25,10 @@
     "react-redux": "^7.2.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "eslint": "^8.3.0",
+    "eslint-plugin-react": "^7.27.1",
+    "jslint-configs": "^3.0.0"
   },
   "private": true
 }

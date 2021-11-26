@@ -4,8 +4,8 @@ import { StyleSheet, View, FlatList, TouchableOpacity, Text, Icon} from 'react-n
 import IconInstance from 'react-native-vector-icons/FontAwesome';
 
 //redux stuff
-import { useDispatch } from 'react-redux'
-import { changeBaseCurrency, changeQuoteCurrency} from './changeBaseCurrency'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeBaseCurrency, changeQuoteCurrency, selectAllCurrencies} from './changeBaseCurrency'
 
 const getCurrencies = async () => {
     try {
@@ -47,7 +47,7 @@ const getCurrencies = async () => {
 
 
 
-const allCurrencies =   ["USD", "PKR", "INR", "CAD", "EUR", "GBP", "YEN"];// getCurrencies();
+//const allCurrencies =   ["USD", "PKR", "INR", "CAD", "EUR", "GBP", "YEN"];// getCurrencies();
 
 const Item = ({ title, iconColor, onPress }) => (
      
@@ -71,7 +71,11 @@ export default function ListCurrencies({route}) {
     
     const {currencyType, currency} = route.params;
     const [selectedCurrency, setSelectedCurrency] = useState(currency);
+
+    const allCurrencies = useSelector(selectAllCurrencies); 
     const dispatch = useDispatch();
+
+
 
     const renderItem = ({ item }) => {
        const iconColor = item === selectedCurrency ? 'black' : 'white';
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     flex:1, 
   },
   title: {
-    fontSize: 20,
+    fontSize: 15,
     flex:1
   },
 });

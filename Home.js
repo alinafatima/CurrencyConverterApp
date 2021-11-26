@@ -1,13 +1,11 @@
-//import { StatusBar } from 'expo-status-bar';
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image  } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image  } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { useSelector, useDispatch } from 'react-redux';
 //redux imports 
-import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme } from './changeBaseCurrency';
+import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI } from './changeBaseCurrency';
 
 
 export default function Home({ navigation }) {
@@ -24,6 +22,9 @@ export default function Home({ navigation }) {
     //Months for Date
     const months = ["Jan" , "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dispatch = useDispatch();
+
+   dispatch(getAllCurrenciesFromAPI()); 
+   console.log("hereeee");
     let todayDate = new Date();
 
   return (
@@ -67,6 +68,13 @@ export default function Home({ navigation }) {
                 setQuoteValue(text*conversionRate);
               }
           }
+          onSubmitEditing={
+            (text)=> {
+                setBaseValue(text);
+                setQuoteValue(text*conversionRate);
+              }
+          }
+          
         />
       </View>
       <View style={{ flexDirection:'row', margin:12 }}>
@@ -88,6 +96,13 @@ export default function Home({ navigation }) {
               setBaseValue(text/conversionRate);
             }
         }
+        onSubmitEditing={
+            (text)=> {
+                setQuoteValue(text);
+                console.log("heree")  
+                setBaseValue(text/conversionRate);
+              }
+          }
         />
       </View>
      
