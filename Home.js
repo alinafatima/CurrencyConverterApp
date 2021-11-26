@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image  } from 'react-native';
+import {Keyboard} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image  } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,8 +24,8 @@ export default function Home({ navigation }) {
     const months = ["Jan" , "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dispatch = useDispatch();
 
-    dispatch(getAllCurrenciesFromAPI()); 
-    dispatch(getConversionRateForBaseCurrency(baseCurrency, quoteCurrency));
+    //dispatch(getAllCurrenciesFromAPI()); 
+    //dispatch(getConversionRateForBaseCurrency(baseCurrency, quoteCurrency));
   
    console.log("Home component", "Base Currency from Store", baseCurrency, "rate from store", conversionRate);
     let todayDate = new Date();
@@ -66,8 +67,10 @@ export default function Home({ navigation }) {
           keyboardType="numeric"
           onChangeText={
               (text)=> {
+                console.log(typeof text);
                 setBaseValue(text);
-                setQuoteValue(text*conversionRate);
+                console.log("baseValue", localBaseValue)
+                setQuoteValue((text*conversionRate).toString());
               }
           }
           
@@ -88,13 +91,11 @@ export default function Home({ navigation }) {
           onChangeText={
             (text)=> {
               setQuoteValue(text);
-              console.log("heree in change text quote")  
-              setBaseValue(text/conversionRate);
+              setBaseValue((text/conversionRate).toString());
             }
         }
         />
       </View>
-     
       <Text style={{color:"#ffffff", margin:12}}>
         1 {baseCurrency} = {conversionRate} {quoteCurrency} as of {(months[todayDate.getMonth()]) + " " + todayDate.getDate() + ", " +  todayDate.getFullYear()}
       </Text>
