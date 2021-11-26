@@ -1,38 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import React from "react";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity} from "react-native";
+import PropTypes from "prop-types";
 
-import { useDispatch } from 'react-redux'
-import { changeTheme} from './changeBaseCurrency'
+import { useDispatch } from "react-redux";
+import { changeTheme} from "./changeBaseCurrency";
 
 
 
 const DATA = [
     {
-      id: '1',
-      title: 'Blue',
-      colorHex: '#339DFF'
+      id: "1",
+      title: "Blue",
+      colorHex: "#339DFF"
     },
     {
-      id: '2',
-      title: 'Orange',
-      colorHex: '#FFBF00'
+      id: "2",
+      title: "Orange",
+      colorHex: "#FFBF00"
     },
     {
-      id: '3',
-      title: 'Green',
-      colorHex: '#4CAA88'
+      id: "3",
+      title: "Green",
+      colorHex: "#4CAA88"
 
     },
     {
-        id: '4',
-        title: 'Purple',
-        colorHex: '#725495'
+        id: "4",
+        title: "Purple",
+        colorHex: "#725495"
     },
     {
-        id: '5', 
-        title: 'Gray', 
-        colorHex: '#516d79'
+        id: "5", 
+        title: "Gray", 
+        colorHex: "#516d79"
     }
 ];
 
@@ -41,9 +41,9 @@ const DATA = [
 const Item = ({ title, color, onPress }) => (
     <View style={styles.item}>
         <TouchableOpacity style={{
-            flexDirection: 'row', 
+            flexDirection: "row", 
             flex:1,
-            width: '100%', 
+            width: "100%", 
         }} onPress={onPress}>
         <Text style={styles.title}>{title}</Text>
         <View style={{
@@ -57,7 +57,7 @@ const Item = ({ title, color, onPress }) => (
     </View>
   );
 
-export default function Settings({navigation}) {
+export default function Settings() {
     
     const dispatch = useDispatch();
     const renderItem = ({ item }) => (
@@ -72,8 +72,8 @@ export default function Settings({navigation}) {
           keyExtractor={item => item.id}
           style={{
               flex:1, 
-              width: '100%', 
-              backgroundColor: '#ffffff', 
+              width: "100%", 
+              backgroundColor: "#ffffff", 
               
           }}
         />
@@ -83,16 +83,17 @@ export default function Settings({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#516d79',
+    backgroundColor: "#516d79",
     flex: 1, 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
 
   },
   item: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     padding: 10,
     borderBottomWidth: 1,
+    borderColor: "#F8F8F8",
     flex:1
   },
   title: {
@@ -102,3 +103,8 @@ const styles = StyleSheet.create({
 });
 
 
+Item.propTypes = {
+    onPress:PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired, 
+    color: PropTypes.string.isRequired
+};

@@ -29,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "eslint": "^8.3.0",
+    "eslint-plugin-jest": "^25.3.0",
     "eslint-plugin-react": "^7.27.1",
     "jslint-configs": "^3.0.0"
   },

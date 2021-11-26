@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const counterSlice= createSlice({
-  name: 'counter',
+  name: "counter",
   initialState: {
     baseCurrency: "USD", 
     quoteCurrency: "GBP",
@@ -9,8 +9,8 @@ export const counterSlice= createSlice({
     quoteValue: "0", 
     conversionRate: "0.77208", 
     theme: {
-        color: 'gray',
-        hexCode: '#516d79'
+        color: "gray",
+        hexCode: "#516d79"
     }, 
     allCurrencies: ["USD", "PKR", "INR", "CAD", "EUR", "GBP", "YEN", "AED"], 
   },
@@ -27,7 +27,7 @@ export const counterSlice= createSlice({
         state.baseCurrency = state.quoteCurrency;
         state.quoteCurrency = temp;
 
-        var temp =  state.baseValue;
+        temp =  state.baseValue;
         state.baseValue = state.quoteValue;
         state.quoteValue = temp;
        
@@ -41,19 +41,18 @@ export const counterSlice= createSlice({
     changeTheme: (state, action) => {
         state.theme.color = action.payload.title;
         state.theme.hexCode = action.payload.colorHex; 
-        //console.log(action);
     }, 
     changeConversionRate: (state, action) => {
-        state.conversionRate = action.payload
+        state.conversionRate = action.payload;
     },
     getAllCurrencies: (state, action) => {
         state.allCurrencies = action.payload;
     }
   }
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeBaseValue, changeQuoteValue, changeTheme, getAllCurrencies, changeConversionRate } = counterSlice.actions
+export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeBaseValue, changeQuoteValue, changeTheme, getAllCurrencies, changeConversionRate } = counterSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -69,24 +68,23 @@ export const getAllCurrenciesFromAPI = amount => dispatch => {
 export function getAllCurrenciesFromAPI() {
   // getAllCurrenciesFromAPIThunk is the "thunk function"
   return async function getAllCurrenciesFromAPIThunk(dispatch) {
-    const response = await fetch('https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/codes');
+    const response = await fetch("https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/codes");
     const json = await response.json();
 
     dispatch(getAllCurrencies(json.supported_codes.map( curr => curr[0]))); 
 
-    }
+    };
 }
 
 export function getConversionRateForBaseCurrency(baseCurrency,quoteCurrency) {
     
     // getAllCurrenciesFromAPIThunk is the "thunk function"
     return async function getConversionRateForBaseCurrency(dispatch) {
-      const response = await fetch('https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/latest/'+ baseCurrency);
+      const response = await fetch("https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/latest/"+ baseCurrency);
       const json = await response.json();
       const conversionRates = json.conversion_rates;   
-      console.log(conversionRates[quoteCurrency])
       dispatch(changeConversionRate(conversionRates[quoteCurrency])); 
-    }
+    };
 }
 
 
@@ -103,4 +101,4 @@ export const selectTheme = state => state.counter.theme;
 export const selectAllCurrencies = state => state.counter.allCurrencies;
 
 
-export default counterSlice.reducer
+export default counterSlice.reducer;

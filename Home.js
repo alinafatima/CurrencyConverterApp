@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {Keyboard} from 'react-native';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image  } from 'react-native';
-
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Ionicons } from '@expo/vector-icons';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useState} from "react";
+import {Keyboard} from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image  } from "react-native";
+import PropTypes from "prop-types";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Ionicons } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
 //redux imports 
-import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI, getConversionRateForBaseCurrency} from './changeBaseCurrency';
+import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI, getConversionRateForBaseCurrency} from "./changeBaseCurrency";
 
 
 export default function Home({ navigation }) {
@@ -15,7 +15,7 @@ export default function Home({ navigation }) {
     const baseValue = useSelector(selectBaseValue);
     const quoteValue = useSelector(selectQuoteValue);
     const conversionRate = useSelector(selectConversionRate);
-    const theme = useSelector(selectTheme)
+    const theme = useSelector(selectTheme);
 
     const [localBaseValue, setBaseValue] = useState(baseValue); 
     const [localQuoteValue, setQuoteValue] = useState(quoteValue); 
@@ -24,24 +24,26 @@ export default function Home({ navigation }) {
     const months = ["Jan" , "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dispatch = useDispatch();
 
-    //dispatch(getAllCurrenciesFromAPI()); 
-    //dispatch(getConversionRateForBaseCurrency(baseCurrency, quoteCurrency));
+
+    dispatch(getAllCurrenciesFromAPI()); 
+    dispatch(getConversionRateForBaseCurrency(baseCurrency, quoteCurrency));
   
-   console.log("Home component", "Base Currency from Store", baseCurrency, "rate from store", conversionRate);
     let todayDate = new Date();
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} 
+                                accessible={false}>
     <View style={{
         flex: 1,
         backgroundColor: theme.hexCode,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
       }}>
       <TouchableOpacity style={{
-         position: 'absolute',
+         position: "absolute",
          right: 5,
          top: 5,
-      }} onPress={() => navigation.navigate('Settings') }>
+      }} onPress={() => navigation.navigate("Settings") }>
       <Icon
           name='cog'
           size={25}
@@ -49,16 +51,16 @@ export default function Home({ navigation }) {
           style={{height:25,width:25}}/>
       </TouchableOpacity>
       <Image
-          source={require('./logo.png')} 
+          source={require("./logo.png")} 
           style={{ width: 150, height: 150, margin:12 }}
       />
       <Text style={styles.title} >Currency Converter</Text>
-      <View style={{ flexDirection:'row',  margin:12 }}>
+      <View style={{ flexDirection:"row",  margin:12 }}>
         <TouchableOpacity style={styles.currencyButton} onPress={() =>
         
-        navigation.navigate('CurrencyList', {"currencyType": "base", "currency": baseCurrency})
+        navigation.navigate("CurrencyList", {"currencyType": "base", "currency": baseCurrency})
       }>
-          <Text style={{color: theme.hexCode,  fontWeight: 'bold'}}> {baseCurrency}</Text>
+          <Text style={{color: theme.hexCode,  fontWeight: "bold"}}> {baseCurrency}</Text>
         </TouchableOpacity>
         <TextInput
           style={styles.base}
@@ -67,21 +69,19 @@ export default function Home({ navigation }) {
           keyboardType="numeric"
           onChangeText={
               (text)=> {
-                console.log(typeof text);
                 setBaseValue(text);
-                console.log("baseValue", localBaseValue)
                 setQuoteValue((text*conversionRate).toString());
               }
           }
           
         />
       </View>
-      <View style={{ flexDirection:'row', margin:12 }}>
+      <View style={{ flexDirection:"row", margin:12 }}>
         <TouchableOpacity style={styles.currencyButton} onPress={() =>
         
-        navigation.navigate('CurrencyList',  {"currencyType": "quote", "currency": quoteCurrency})
+        navigation.navigate("CurrencyList",  {"currencyType": "quote", "currency": quoteCurrency})
       }>
-          <Text style={{color:theme.hexCode, fontWeight: 'bold'}} > {quoteCurrency}</Text>
+          <Text style={{color:theme.hexCode, fontWeight: "bold"}} > {quoteCurrency}</Text>
         </TouchableOpacity>
         <TextInput
           style={styles.quote}
@@ -92,6 +92,7 @@ export default function Home({ navigation }) {
             (text)=> {
               setQuoteValue(text);
               setBaseValue((text/conversionRate).toString());
+              Keyboard.dismiss();
             }
         }
         />
@@ -102,7 +103,7 @@ export default function Home({ navigation }) {
       <TouchableOpacity 
         style={{
             backgroundColor: theme.hexCode,
-            flexDirection: 'row'
+            flexDirection: "row"
           }}
         onPress={() => {
             setBaseValue(localQuoteValue);
@@ -113,35 +114,35 @@ export default function Home({ navigation }) {
           name='sync'
           size={15}
           color='#ffffff'/>
-          <Text style={{color:'#ffffff'}}> Reverse Currencies</Text>
+          <Text style={{color:"#ffffff"}}> Reverse Currencies</Text>
       </TouchableOpacity>
-
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   title:{
-    color: 'white', 
+    color: "white", 
     fontSize: 20, 
-    fontWeight: 'bold'
+    fontWeight: "bold"
   }, 
   base: {
     height: 40,
     padding: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderTopRightRadius:5,
     borderBottomRightRadius: 5, 
   }, 
   quote: {
     height: 40,
     padding: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderTopRightRadius:5,
     borderBottomRightRadius: 5, 
   }, 
   currencyButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderColor: "#d3d3d3",
     height: 40,
     alignItems: "center",
@@ -151,3 +152,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   }, 
 });
+
+Home.propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+  };

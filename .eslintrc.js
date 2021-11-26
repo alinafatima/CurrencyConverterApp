@@ -1,12 +1,12 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true, 
+        "node": true, 
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended", 
-        "./node_modules/jslint-configs/config-react-native.js"
+        "plugin:react/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -18,7 +18,7 @@ module.exports = {
     "plugins": [
         "react"
     ],
-    "rules": {
+    "rules":  {
         "semi": ["error", "always"],
         "quotes": ["error", "double"]
     }

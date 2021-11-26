@@ -1,19 +1,19 @@
-//import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 //redux
-import store from './store'
-import { Provider } from 'react-redux'
+import store from "./store";
+import { Provider } from "react-redux";
 
 
 const Stack = createNativeStackNavigator();
 
 
 //Components 
-import Home from './Home';
-import Settings from './Settings';
-import CurrencyList from './CurrencyList';
+import Home from "./Home";
+import Settings from "./Settings";
+import CurrencyList from "./CurrencyList";
 
 export default function App() {
   
