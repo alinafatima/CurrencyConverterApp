@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RATES_API_KEY} from "@env";
 
 export const counterSlice= createSlice({
   name: "counter",
@@ -12,7 +13,7 @@ export const counterSlice= createSlice({
         color: "gray",
         hexCode: "#516d79"
     }, 
-    allCurrencies: ["USD", "PKR", "INR", "CAD", "EUR", "GBP", "YEN", "AED"], 
+    allCurrencies: ["USD", "PKR", "INR", "CAD", "EUR", "GBP", "YEN", "AED"],
   },
   reducers: {
     changeBaseCurrency: (state, action) => {
@@ -20,7 +21,14 @@ export const counterSlice= createSlice({
       
     }, 
     changeQuoteCurrency: (state, action) => {
-        state.quoteCurrency = action.payload; 
+        state.quoteCurrency = action.payload;
+        console.log("change");
+    }, 
+    changeBaseValue: (state, action) => {
+        state.baseValue = action.payload; 
+    }, 
+    changeQuoteValue: (state, action) => {
+        state.quoteValue = action.payload;
     }, 
     reverseCurrencies:  state => {
         var temp =  state.baseCurrency;
@@ -30,13 +38,9 @@ export const counterSlice= createSlice({
         temp =  state.baseValue;
         state.baseValue = state.quoteValue;
         state.quoteValue = temp;
+
+        state.conversionRate = (1/state.conversionRate).toFixed(5).toString();
        
-    }, 
-    changeBaseValue: (state, action) => {
-        state.baseValue = action.payload; 
-    }, 
-    changeQuoteValue: (state, action) => {
-        state.quoteValue = action.payload;
     }, 
     changeTheme: (state, action) => {
         state.theme.color = action.payload.title;
@@ -52,7 +56,7 @@ export const counterSlice= createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeBaseValue, changeQuoteValue, changeTheme, getAllCurrencies, changeConversionRate } = counterSlice.actions;
+export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeTheme, getAllCurrencies, changeConversionRate, changeBaseValue,changeQuoteValue } = counterSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -68,7 +72,7 @@ export const getAllCurrenciesFromAPI = amount => dispatch => {
 export function getAllCurrenciesFromAPI() {
   // getAllCurrenciesFromAPIThunk is the "thunk function"
   return async function getAllCurrenciesFromAPIThunk(dispatch) {
-    const response = await fetch("https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/codes");
+    const response = await fetch(`https://v6.exchangerate-api.com/v6/${RATES_API_KEY}/codes`);
     const json = await response.json();
 
     dispatch(getAllCurrencies(json.supported_codes.map( curr => curr[0]))); 
@@ -76,14 +80,29 @@ export function getAllCurrenciesFromAPI() {
     };
 }
 
-export function getConversionRateForBaseCurrency(baseCurrency,quoteCurrency) {
+export function getConversionRateForBaseCurrency(baseCurrency,quoteCurrency, changeInCurrency, baseValue, quoteValue) {
     
     // getAllCurrenciesFromAPIThunk is the "thunk function"
     return async function getConversionRateForBaseCurrency(dispatch) {
-      const response = await fetch("https://v6.exchangerate-api.com/v6/5351b7520f296bac8b2ee6ae/latest/"+ baseCurrency);
+      const response = await fetch(`https://v6.exchangerate-api.com/v6/${RATES_API_KEY}/latest/${baseCurrency}`);
       const json = await response.json();
       const conversionRates = json.conversion_rates;   
       dispatch(changeConversionRate(conversionRates[quoteCurrency])); 
+      if(changeInCurrency === "base"){
+            if(!quoteValue){
+                quoteValue = "0"; 
+            }
+            let calculate_base_value = (quoteValue/conversionRates[quoteCurrency]).toFixed(5);
+            console.log("baseeeee", calculate_base_value);
+            dispatch(changeBaseValue(calculate_base_value.toString()));
+      }else{
+          console.log("heyyyaaa", baseValue);
+            if(!baseValue){
+                baseValue = "0"; 
+            }
+            let calculate_quote_value = (parseInt(baseValue)*conversionRates[quoteCurrency]).toFixed(5);
+            dispatch(changeQuoteValue(calculate_quote_value.toString()));
+      }
     };
 }
 

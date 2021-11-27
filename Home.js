@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Keyboard} from "react-native";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image  } from "react-native";
 import PropTypes from "prop-types";
@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 //redux imports 
-import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI, getConversionRateForBaseCurrency} from "./changeBaseCurrency";
+import { selectBaseCurrency, selectQuoteCurrency, selectBaseValue, selectQuoteValue, reverseCurrencies, selectConversionRate, selectTheme, getAllCurrenciesFromAPI, changeBaseValue, changeQuoteValue} from "./changeBaseCurrency";
 
 
 export default function Home({ navigation }) {
@@ -19,14 +19,18 @@ export default function Home({ navigation }) {
 
     const [localBaseValue, setBaseValue] = useState(baseValue); 
     const [localQuoteValue, setQuoteValue] = useState(quoteValue); 
-    
+   
     //Months for Date
     const months = ["Jan" , "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dispatch = useDispatch();
 
+    useEffect(()=>{
+        setBaseValue(baseValue);
+        setQuoteValue(quoteValue); 
+          
+    }, [baseValue, quoteValue]);
 
-    dispatch(getAllCurrenciesFromAPI()); 
-    dispatch(getConversionRateForBaseCurrency(baseCurrency, quoteCurrency));
+   dispatch(getAllCurrenciesFromAPI()); 
   
     let todayDate = new Date();
 
@@ -56,10 +60,11 @@ export default function Home({ navigation }) {
       />
       <Text style={styles.title} >Currency Converter</Text>
       <View style={{ flexDirection:"row",  margin:12 }}>
-        <TouchableOpacity style={styles.currencyButton} onPress={() =>
-        
-        navigation.navigate("CurrencyList", {"currencyType": "base", "currency": baseCurrency})
-      }>
+        <TouchableOpacity style={styles.currencyButton} onPress={() =>{
+            dispatch(changeBaseValue(localBaseValue));
+            dispatch(changeQuoteValue(localQuoteValue));
+            navigation.navigate("CurrencyList", {"currencyType": "base", "currency": baseCurrency});
+        }}>
           <Text style={{color: theme.hexCode,  fontWeight: "bold"}}> {baseCurrency}</Text>
         </TouchableOpacity>
         <TextInput
@@ -70,17 +75,18 @@ export default function Home({ navigation }) {
           onChangeText={
               (text)=> {
                 setBaseValue(text);
-                setQuoteValue((text*conversionRate).toString());
+                setQuoteValue((text*conversionRate).toFixed(5).toString());
               }
           }
           
         />
       </View>
       <View style={{ flexDirection:"row", margin:12 }}>
-        <TouchableOpacity style={styles.currencyButton} onPress={() =>
-        
-        navigation.navigate("CurrencyList",  {"currencyType": "quote", "currency": quoteCurrency})
-      }>
+        <TouchableOpacity style={styles.currencyButton} onPress={() =>{
+        dispatch(changeBaseValue(localBaseValue));
+        dispatch(changeQuoteValue(localQuoteValue));
+        navigation.navigate("CurrencyList",  {"currencyType": "quote", "currency": quoteCurrency});
+        }}>
           <Text style={{color:theme.hexCode, fontWeight: "bold"}} > {quoteCurrency}</Text>
         </TouchableOpacity>
         <TextInput
@@ -91,8 +97,8 @@ export default function Home({ navigation }) {
           onChangeText={
             (text)=> {
               setQuoteValue(text);
-              setBaseValue((text/conversionRate).toString());
-              Keyboard.dismiss();
+              setBaseValue((text/conversionRate).toFixed(5).toString());
+             
             }
         }
         />
@@ -106,8 +112,11 @@ export default function Home({ navigation }) {
             flexDirection: "row"
           }}
         onPress={() => {
-            setBaseValue(localQuoteValue);
-            setQuoteValue(localBaseValue);
+           // setBaseValue(localQuoteValue);
+           // setQuoteValue(localBaseValue);
+           // setConversionRate((1/localConversionRate).toString()); 
+            //setConversionRate()
+            //dispatch(changeConversionRate((1/localConversionRate).toString())); 
             dispatch(reverseCurrencies());
         }}>
       <Ionicons

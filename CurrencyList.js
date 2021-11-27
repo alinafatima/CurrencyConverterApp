@@ -8,7 +8,7 @@ import IconInstance from "react-native-vector-icons/FontAwesome";
 
 //redux stuff
 import { useDispatch, useSelector } from "react-redux";
-import { changeBaseCurrency, changeQuoteCurrency, selectAllCurrencies} from "./changeBaseCurrency";
+import { changeBaseCurrency, changeQuoteCurrency, getConversionRateForBaseCurrency,selectBaseValue,selectQuoteValue, selectAllCurrencies, selectBaseCurrency, selectQuoteCurrency} from "./changeBaseCurrency";
 
 const Item = ({ title, iconColor, onPress }) => (
      
@@ -33,6 +33,12 @@ export default function ListCurrencies({route}) {
     const {currencyType, currency} = route.params;
     const [selectedCurrency, setSelectedCurrency] = useState(currency);
 
+    const baseCurrency= useSelector(selectBaseCurrency);
+    const quoteCurrency = useSelector(selectQuoteCurrency);
+
+    const baseValue = useSelector(selectBaseValue);
+    const quoteValue = useSelector(selectQuoteValue);
+
     const allCurrencies = useSelector(selectAllCurrencies); 
     const dispatch = useDispatch();
 
@@ -46,7 +52,14 @@ export default function ListCurrencies({route}) {
             iconColor = {iconColor}
             onPress={() => {
                 setSelectedCurrency(item);
-                currencyType == "base" ? dispatch(changeBaseCurrency(item)): dispatch(changeQuoteCurrency(item));
+                if (currencyType == "base") {
+                    dispatch(changeBaseCurrency(item));
+                    dispatch(getConversionRateForBaseCurrency(item, quoteCurrency, "base", baseValue,quoteValue));
+                }
+                else{
+                    dispatch(changeQuoteCurrency(item));
+                    dispatch(getConversionRateForBaseCurrency(baseCurrency, item, "quote", baseValue,quoteValue));
+                }
             }}
         />);
     };
@@ -56,6 +69,7 @@ export default function ListCurrencies({route}) {
      <FlatList
           data={allCurrencies}
           renderItem={renderItem}
+          keyExtractor={item => item}
           extraData = {selectedCurrency}
           style={{
             flex:1, 
