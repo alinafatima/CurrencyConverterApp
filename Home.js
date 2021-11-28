@@ -112,12 +112,7 @@ export default function Home({ navigation }) {
             flexDirection: "row"
           }}
         onPress={() => {
-           // setBaseValue(localQuoteValue);
-           // setQuoteValue(localBaseValue);
-           // setConversionRate((1/localConversionRate).toString()); 
-            //setConversionRate()
-            //dispatch(changeConversionRate((1/localConversionRate).toString())); 
-            dispatch(reverseCurrencies());
+            dispatch(reverseCurrencies({"baseValue": localBaseValue, "quoteValue": localQuoteValue}));
         }}>
       <Ionicons
           name='sync'

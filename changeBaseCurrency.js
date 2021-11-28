@@ -22,7 +22,6 @@ export const counterSlice= createSlice({
     }, 
     changeQuoteCurrency: (state, action) => {
         state.quoteCurrency = action.payload;
-        console.log("change");
     }, 
     changeBaseValue: (state, action) => {
         state.baseValue = action.payload; 
@@ -30,14 +29,13 @@ export const counterSlice= createSlice({
     changeQuoteValue: (state, action) => {
         state.quoteValue = action.payload;
     }, 
-    reverseCurrencies:  state => {
+    reverseCurrencies:  (state, action) => {
         var temp =  state.baseCurrency;
         state.baseCurrency = state.quoteCurrency;
         state.quoteCurrency = temp;
 
-        temp =  state.baseValue;
-        state.baseValue = state.quoteValue;
-        state.quoteValue = temp;
+        state.baseValue = action.payload.quoteValue;
+        state.quoteValue = action.payload.baseValue;
 
         state.conversionRate = (1/state.conversionRate).toFixed(5).toString();
        
@@ -58,20 +56,13 @@ export const counterSlice= createSlice({
 // Action creators are generated for each case reducer function
 export const { changeBaseCurrency, changeQuoteCurrency, reverseCurrencies, changeTheme, getAllCurrencies, changeConversionRate, changeBaseValue,changeQuoteValue } = counterSlice.actions;
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-/*
-export const getAllCurrenciesFromAPI = amount => dispatch => {
-    
-  
-};
-*/
+// The function below is called a thunk and allows us to perform async logic.
+
 //  getAllCurrenciesFromAPI is the "thunk action creator"
 export function getAllCurrenciesFromAPI() {
   // getAllCurrenciesFromAPIThunk is the "thunk function"
   return async function getAllCurrenciesFromAPIThunk(dispatch) {
+   
     const response = await fetch(`https://v6.exchangerate-api.com/v6/${RATES_API_KEY}/codes`);
     const json = await response.json();
 
@@ -93,10 +84,8 @@ export function getConversionRateForBaseCurrency(baseCurrency,quoteCurrency, cha
                 quoteValue = "0"; 
             }
             let calculate_base_value = (quoteValue/conversionRates[quoteCurrency]).toFixed(5);
-            console.log("baseeeee", calculate_base_value);
             dispatch(changeBaseValue(calculate_base_value.toString()));
       }else{
-          console.log("heyyyaaa", baseValue);
             if(!baseValue){
                 baseValue = "0"; 
             }

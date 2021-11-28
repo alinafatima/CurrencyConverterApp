@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     flex:1, 
+    borderColor: "#F8F8F8",
   },
   title: {
     fontSize: 15,
