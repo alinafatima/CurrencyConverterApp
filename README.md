@@ -22,3 +22,7 @@ npm run start
 ### :iphone: iOS app
 https://user-images.githubusercontent.com/26784413/219935801-94ed11ea-8027-436b-bf9b-e59782df80ae.mp4
 
+### :iphone: Android app
+https://user-images.githubusercontent.com/26784413/219938489-0058a602-817d-4a51-b753-1effb9c37cdc.mp4
+
+
