@@ -16,3 +16,9 @@ RATES_API_KEY=your_api_key
 ```bash
 npm run start
 ```
+
+
+## :camera: Screencasts:
+### :iphone: iOS app
+https://user-images.githubusercontent.com/26784413/219935801-94ed11ea-8027-436b-bf9b-e59782df80ae.mp4
+
